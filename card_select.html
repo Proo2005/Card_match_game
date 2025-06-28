@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memory Match Game</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: Arial;
+    }
+
+    header {
+      background-color: red;
+      height: 100px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 440px;
+      margin-top: 20px;
+    }
+
+    .card {
+      width: 100px;
+      height: 100px;
+      background-color: green;
+      margin: 10px;
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      color: white;
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      display: none;
+    }
+
+    .card.revealed img {
+      display: block;
+    }
+
+    .card.matched {
+      pointer-events: none;
+      background-color: gray;
+    }
+
+    .win {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 2rem;
+      z-index: 999;
+    }
+
+    #play-again {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #00cc66;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #play-again:hover {
+      background-color: #00aa55;
+    }
+  </style>
+</head>
+
+<body>
+  <header>Match the Cards</header>
+
+  <div class="container">
+    <div class="card" data-card-id="1" data-image="a.png">Card 1 <img src="a.png" alt=""></div>
+    <div class="card" data-card-id="2" data-image="a.png">Card 2 <img src="a.png" alt=""></div>
+    <div class="card" data-card-id="3" data-image="m.png">Card 3 <img src="m.png" alt=""></div>
+    <div class="card" data-card-id="4" data-image="a.png">Card 4 <img src="a.png" alt=""></div>
+    <div class="card" data-card-id="5" data-image="m.png">Card 5 <img src="m.png" alt=""></div>
+    <div class="card" data-card-id="6" data-image="m.png">Card 6 <img src="m.png" alt=""></div>
+    <div class="card" data-card-id="7" data-image="m.png">Card 7 <img src="m.png" alt=""></div>
+    <div class="card" data-card-id="8" data-image="a.png">Card 8 <img src="a.png" alt=""></div>
+    <div class="card" data-card-id="9" data-image="m.png">Card 9 <img src="m.png" alt=""></div>
+    <div class="card" data-card-id="10" data-image="a.png">Card 10 <img src="a.png" alt=""></div>
+    <div class="card" data-card-id="11" data-image="m.png">Card 11 <img src="m.png" alt=""></div>
+    <div class="card" data-card-id="12" data-image="a.png">Card 12 <img src="a.png" alt=""></div>
+  </div>
+
+  <div class="win" id="winMessage">
+    <h1>You Win!</h1>
+    <p>You matched all the cards!</p>
+    <button id="play-again">Play Again</button>
+  </div>
+
+  <script>
+    const cards = document.querySelectorAll('.card');
+    let selectedCards = [];
+    let matchedCount = 0;
+
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        if (card.classList.contains('revealed') || card.classList.contains('matched')) return;
+
+        card.classList.add('revealed');
+        selectedCards.push(card);
+
+        if (selectedCards.length === 2) {
+          const [first, second] = selectedCards;
+          const firstImg = first.getAttribute('data-image');
+          const secondImg = second.getAttribute('data-image');
+
+          if (firstImg === secondImg) {
+            first.classList.add('matched');
+            second.classList.add('matched');
+            matchedCount += 2;
+            selectedCards = [];
+
+            if (matchedCount === cards.length) {
+              setTimeout(() => {
+                document.getElementById("winMessage").style.display = "flex";
+              }, 300);
+            }
+          } else {
+            setTimeout(() => {
+              first.classList.remove('revealed');
+              second.classList.remove('revealed');
+              selectedCards = [];
+            }, 800);
+          }
+        }
+      });
+    });
+
+    document.getElementById("play-again").addEventListener("click", () => {
+      document.getElementById("winMessage").style.display = "none";
+      selectedCards = [];
+      matchedCount = 0;
+
+      cards.forEach(card => {
+        card.classList.remove("revealed", "matched");
+      });
+
+      const container = document.querySelector(".container");
+      const shuffledCards = Array.from(cards).sort(() => Math.random() - 0.5);
+      shuffledCards.forEach(card => container.appendChild(card));
+    });
+  </script>
+</body>
+</html>
