@@ -31,9 +31,9 @@
 
 ## 📸 Screenshots
 
-| Game Start | Matching Cards | Win Screen |
-|------------|----------------|-------------|
-| ![start](assets/start.png) | ![match](assets/match.png) | ![win](assets/win.png) |
+| Game Start | Matching Cards |
+|------------|----------------|
+| ![start](assets/a.png) | ![match](assets/m.png) | 
 
 *(Add your own screenshots in a `/assets` folder and update links)*
 
